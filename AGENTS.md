@@ -12,6 +12,6 @@
 - Your final message lists what files you changed and what was verified. 
 
 ## Conventions 
-- Work strictly inside `../target-app`. 
+- Work strictly inside `target-app`. 
 - Keep weather API keys in `.env` and never commit real secret keys.
 - Always handle API failure cases gracefully (e.g., city not found) without unhandled exceptions.

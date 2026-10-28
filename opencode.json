@@ -1,16 +1,11 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "deepseek/deepseek-v4.1-flash-1017",
-  "tools": [
-    "tools/check_build.ts",
-    "tools/check_types.ts",
-    "tools/temperature_converter.ts"
-  ],
+  "model": "openrouter/deepseek/deepseek-v4.1-flash-1017",
+  "instructions": ["spec.md"],
   "permission": {
-    "*": "ask",
-    "bash": "ask",
-    "edit": "deny",
+    "*": "allow",
+    "bash": "allow",
+    "edit": "allow",
     "read": "allow"
   }
-
 }
