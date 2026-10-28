@@ -1,15 +1,14 @@
 import path from "path";
 import { execSync } from "child_process";
-import { tool } from "@opencode-ai/plugin";
 
-export default tool({
+export default {
   description:
     "Runs `npm run build` inside the target-app directory to check " +
-    "whether the project has any build/type-check errors.",
+    "whether the project has any build errors.",
 
   args: {},
 
-  async execute(_args, context) {
+  async execute(_args: unknown, context: { worktree: string }) {
     const targetDir = path.join(context.worktree, "target-app");
 
     try {
@@ -20,7 +19,7 @@ export default tool({
 
       return JSON.stringify({
         status: "SUCCESS",
-        message: "Build completed successfully. No errors found.",
+        message: "Build finished successfully.",
         output: stdout.slice(-300),
       });
     } catch (error) {
@@ -32,4 +31,4 @@ export default tool({
       });
     }
   },
-});
+};

@@ -1,14 +1,14 @@
 import path from "path";
 import { execSync } from "child_process";
-import { tool } from "@opencode-ai/plugin";
 
-export default tool({
+export default {
   description:
-    "Chạy `npx tsc --noEmit` trong target-app để kiểm tra lỗi kiểu dữ liệu TypeScript.",
+    "Runs `npx tsc --noEmit` inside the target-app directory to check " +
+    "for TypeScript type errors.",
 
   args: {},
 
-  async execute(_args, context) {
+  async execute(_args: unknown, context: { worktree: string }) {
     const targetDir = path.join(context.worktree, "target-app");
 
     try {
@@ -19,15 +19,15 @@ export default tool({
 
       return JSON.stringify({
         status: "SUCCESS",
-        message: "Không phát hiện lỗi kiểu dữ liệu nào!",
+        message: "No TypeScript type errors found.",
       });
     } catch (error) {
       const err = error as NodeJS.ErrnoException & { stdout?: string | Buffer };
       return JSON.stringify({
         status: "FAILED",
-        message: "Phát hiện lỗi kiểu dữ liệu TypeScript!",
+        message: "TypeScript type errors detected.",
         errorLog: err.stdout ? err.stdout.toString() : err.message,
       });
     }
   },
-});
+};

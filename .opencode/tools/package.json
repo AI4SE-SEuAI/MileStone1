@@ -1,0 +1,9 @@
+{
+  "name": "opencode-tools",
+  "private": true,
+  "type": "module",
+  "devDependencies": {
+    "@types/node": "^22",
+    "typescript": "^5"
+  }
+}
