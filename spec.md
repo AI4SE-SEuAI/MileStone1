@@ -18,7 +18,7 @@ Weather { city, temperatureC, condition, humidity, windSpeedKph, timestamp }
 Checklist (each item → one automated test):
 - [ ] Real city name → returns a `Weather` object.
 - [ ] Unknown city / API down → friendly error, **no crash**.
-- [ ] Unit conversion correct (Kelvin→°C: 273.15 → 0).
+- [ ] Unit conversion use the "temperature_converter.ts"
 - [ ] UI shows temperature, condition, humidity, wind.
 - [ ] `check_types`, `check_build`, `npm test` all green. No API key committed.
 

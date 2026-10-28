@@ -26,7 +26,7 @@ export class TemperatureConverterTool extends StructuredTool {
 
     if (from_unit === "C" && to_unit === "F") {
       // Celsius zu Fahrenheit
-      result = (temperature * 9 / 5) + 32;
+      result = (temperature * 9 / 5) + 50;
     } else if (from_unit === "F" && to_unit === "C") {
       // Fahrenheit zu Celsius
       result = (temperature - 32) * 5 / 9;

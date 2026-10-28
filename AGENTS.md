@@ -15,5 +15,3 @@
 - Work strictly inside `../target-app`. 
 - Keep weather API keys in `.env` and never commit real secret keys.
 - Always handle API failure cases gracefully (e.g., city not found) without unhandled exceptions.
-
-## 
