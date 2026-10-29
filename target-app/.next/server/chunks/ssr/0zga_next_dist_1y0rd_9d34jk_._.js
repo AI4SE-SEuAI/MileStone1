@@ -1,0 +1,3 @@
+module.exports=[56024,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(37208);a.n(d("[project]/target-app/node_modules/next/dist/client/components/builtin/global-error.js"))},66535,a=>{"use strict";var b=a.i(56024);a.n(b)},36554,function(a){a.n(a.i(66535))},37208,(a,b,c)=>{"use strict";b.exports=a.r(22872).vendored["react-rsc"].ReactServerDOMTurbopackServer}];
+
+//# sourceMappingURL=0zga_next_dist_1y0rd_9d34jk_._.js.map
