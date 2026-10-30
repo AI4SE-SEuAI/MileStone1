@@ -8,6 +8,7 @@ A web app where the user types a city name and sees current weather
 - **No database.** Data comes from a weather API without an API key.
 - **API**: Open-Meteo geocoding + forecast endpoints; no key, no `.env` secret.
 - **Logic**: weather logic in one testable module (`weather.ts`); UI consumes it.
+- **Units**: the weather API returns Kelvin; the app must convert and display Celsius (helper tool `temperature_converter.ts` is available).
 
 Data model (single type):
 

@@ -1,6 +1,6 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "openrouter/deepseek/deepseek-v4.1-flash-1017",
+  "model": "openrouter/deepseek/deepseek-v4-flash",
   "instructions": ["spec.md"],
   "permission": {
     "*": "allow",
