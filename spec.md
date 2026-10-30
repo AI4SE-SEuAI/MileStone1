@@ -6,6 +6,7 @@ A web app where the user types a city name and sees current weather
 (temperature, condition, humidity, wind speed).
 
 - **No database.** Data comes from a weather API without an API key.
+- **API**: Open-Meteo geocoding + forecast endpoints; no key, no `.env` secret.
 - **Logic**: weather logic in one testable module (`weather.ts`); UI consumes it.
 
 Data model (single type):
@@ -22,7 +23,7 @@ Checklist (each item → one automated test):
 - [ ] Unknown city / API down → friendly error, **no crash**.
 - [ ] Unit conversion use the "temperature_converter.ts"
 - [ ] UI shows temperature, condition, humidity, wind.
-- [ ] `check_types`, `check_build`, `npm test` all green. No API key committed.
+- [ ] `check_types`, `check_build`, `check_free_weather_api`, `npm test` all green. No API key used.
 
 ## 3. Out of Scope
 
