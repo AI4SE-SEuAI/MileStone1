@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { tool } from "@opencode-ai/plugin";
 
 interface Finding {
   file: string;
@@ -75,7 +76,7 @@ function findMissingRequired(files: string[]): string[] {
   return REQUIRED_PATTERNS.filter((pattern) => !contents.includes(pattern));
 }
 
-export default {
+export default tool({
   description:
     "Verifies that target-app uses the free Open-Meteo API and contains no " +
     "OpenWeatherMap endpoints or API-key usage. Writes a structured report to " +
@@ -83,7 +84,7 @@ export default {
 
   args: {},
 
-  async execute(_args: unknown, context: { worktree: string }) {
+  async execute(_args, context) {
     const sourceDir = path.join(context.worktree, "target-app", "src");
     const reportDir = path.join(context.worktree, "results");
     const reportPath = path.join(reportDir, "free-weather-api.json");
@@ -132,4 +133,4 @@ export default {
       missingRequired: report.missingRequired,
     });
   },
-};
+});

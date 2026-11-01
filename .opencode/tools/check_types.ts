@@ -1,14 +1,15 @@
 import path from "path";
 import { execSync } from "child_process";
+import { tool } from "@opencode-ai/plugin";
 
-export default {
+export default tool({
   description:
     "Runs `npx tsc --noEmit` inside the target-app directory to check " +
     "for TypeScript type errors.",
 
   args: {},
 
-  async execute(_args: unknown, context: { worktree: string }) {
+  async execute(_args, context) {
     const targetDir = path.join(context.worktree, "target-app");
 
     try {
@@ -30,4 +31,4 @@ export default {
       });
     }
   },
-};
+});

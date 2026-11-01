@@ -3,6 +3,7 @@
     "target": "ES2022",
     "module": "ESNext",
     "moduleResolution": "Bundler",
+    "typeRoots": ["../node_modules/@types", "../../target-app/node_modules/@types"],
     "types": ["node"],
     "lib": ["ES2022", "DOM"],
     "strict": true,

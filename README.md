@@ -19,12 +19,12 @@ forecast APIs, so no API key or `.env` secret is required.
 ├── spec.md                       # specification of the weather app
 ├── model-selection.md            # 3-model comparison and decision
 ├── .opencode/
-│   ├── package.json              # plugin/tool dependencies
+│   ├── package.json              # @opencode-ai/plugin dependency
 │   └── tools/
-│       ├── check_build.ts        # runs `npm run build` in target-app
-│       ├── check_types.ts        # runs `npx tsc --noEmit` in target-app
-│       ├── check_free_weather_api.ts  # checks free API usage, writes a report
-│       └── temperature_converter.ts   # C/F conversion tool
+│       ├── check_build.ts            # runs `npm run build` in target-app
+│       ├── check_types.ts            # runs `npx tsc --noEmit` in target-app
+│       ├── check_free_weather_api.ts # checks free API usage, writes a report
+│       └── temperature_converter.ts  # C/F conversion tool
 ├── results/                      # generated check reports
 └── target-app/                   # Next.js weather app (the target software)
 ```
@@ -33,9 +33,20 @@ forecast APIs, so no API key or `.env` secret is required.
 
 - Node.js 20 or newer
 - npm
-- OpenCode v1
+- OpenCode v1 (v1.18.31)
 
-## Install and run the app
+## Install the harness into a project
+
+To install this harness into an existing repository:
+
+1. Copy `opencode.json`, `AGENTS.md`, `spec.md`, and the `.opencode/` directory into the project root.
+2. Install the OpenCode plugin dependencies:
+
+```powershell
+npm install --prefix .opencode
+```
+
+## Install and run the target app
 
 ```powershell
 npm install --prefix target-app
