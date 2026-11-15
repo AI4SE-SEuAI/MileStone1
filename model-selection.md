@@ -13,17 +13,18 @@ tools reliably, and iterate on TypeScript code without excessive cost.
 
 ## Decision
 
-Use `openrouter/deepseek/deepseek-v4.1-flash-1017` as the default model.
+Use `opencode/deepseek-v4.1-flash-free` as the default model.
 
 Reasons:
 
-1. It handles TypeScript editing and tool calls well enough for the harness loop.
-2. Its latency and cost are balanced for repeated `check_types` /
-   `check_build` / `npm test` iterations.
-3. The paid OpenRouter route avoids free-tier throttling during the demo.
-4. A cheaper free model remains available as a fallback if cost or quota
-   becomes a problem, and `deepseek-v4-pro` can be selected manually for
-   unusually difficult tasks.
+1. The OpenRouter key configured in this environment reports a `$0.00` limit, so
+   `openrouter/deepseek/deepseek-v4.1-flash-1017` fails before the first tool
+   call ("Key limit exceeded (daily limit)").
+2. The free OpenCode route is available, supports tool calls, and is sufficient
+   for this small TypeScript app and the verification loop.
+3. `openrouter/deepseek/deepseek-v4.1-flash-1017` remains the preferred paid
+   option if a budget is added to the key; `deepseek-v4-pro` can be selected
+   manually for unusually difficult tasks.
 
 ## Risks and mitigations
 

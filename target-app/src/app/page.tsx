@@ -1,3 +1,4 @@
+import { CityTemperatures } from "@/components/CityTemperatures";
 import { WeatherSearch } from "@/components/WeatherSearch";
 
 export default function HomePage() {
@@ -10,6 +11,7 @@ export default function HomePage() {
           Search any city for current conditions and a seven-day outlook.
         </p>
       </section>
+      <CityTemperatures />
       <WeatherSearch />
       <footer>
         Weather data by{" "}

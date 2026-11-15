@@ -1,6 +1,5 @@
-import path from "path";
-import { execSync } from "child_process";
 import { tool } from "@opencode-ai/plugin";
+import { runBuild } from "../lib/verification";
 
 export default tool({
   description:
@@ -10,26 +9,12 @@ export default tool({
   args: {},
 
   async execute(_args, context) {
-    const targetDir = path.join(context.worktree, "target-app");
+    const result = runBuild(context.worktree);
 
-    try {
-      const stdout = execSync("npm run build", {
-        cwd: targetDir,
-        encoding: "utf-8",
-      });
-
-      return JSON.stringify({
-        status: "SUCCESS",
-        message: "Build finished successfully.",
-        output: stdout.slice(-300),
-      });
-    } catch (error) {
-      const err = error as NodeJS.ErrnoException & { stdout?: string | Buffer };
-      return JSON.stringify({
-        status: "FAILED",
-        message: "Build failed.",
-        errorLog: err.stdout ? err.stdout.toString() : err.message,
-      });
-    }
+    return JSON.stringify({
+      status: result.ok ? "SUCCESS" : "FAILED",
+      message: result.message,
+      ...(result.errorLog ? { errorLog: result.errorLog } : {}),
+    });
   },
 });

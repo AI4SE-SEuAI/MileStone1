@@ -75,6 +75,48 @@ h1 {
   gap: 1.25rem;
 }
 
+.cities {
+  margin-bottom: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  backdrop-filter: blur(14px);
+}
+
+.cities-title {
+  margin-bottom: 0.85rem;
+  font-size: 1rem;
+}
+
+.city-list {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.city-list li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 12px;
+  background: rgba(0, 0, 0, 0.14);
+}
+
+.city-temperature {
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.city-loading {
+  color: var(--muted);
+}
+
+
 .search {
   display: flex;
   gap: 0.65rem;

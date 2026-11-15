@@ -20,3 +20,10 @@ export function formatTemperature(
 
   return `${value.toFixed(1)}°${unit === "celsius" ? "C" : "F"}`;
 }
+
+export function formatCityTemperature(
+  celsius: number | null,
+  unit: TemperatureUnit,
+): string {
+  return celsius === null ? "—" : formatTemperature(celsius, unit);
+}

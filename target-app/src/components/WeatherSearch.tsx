@@ -8,6 +8,7 @@ import {
   type TemperatureUnit,
 } from "@/services/weather/temperature_converter";
 import type { Weather } from "@/types/weather";
+import { UnitToggle } from "@/components/UnitToggle";
 
 function formatDay(date: string): string {
   return new Date(`${date}T00:00:00`).toLocaleDateString(undefined, {
@@ -85,22 +86,7 @@ export function WeatherSearch() {
               <h2>{weather.city}</h2>
               <p className="condition">{weather.condition}</p>
             </div>
-            <div className="unit-toggle" aria-label="Temperature unit">
-              <button
-                type="button"
-                className={unit === "celsius" ? "active" : ""}
-                onClick={() => setUnit("celsius")}
-              >
-                °C
-              </button>
-              <button
-                type="button"
-                className={unit === "fahrenheit" ? "active" : ""}
-                onClick={() => setUnit("fahrenheit")}
-              >
-                °F
-              </button>
-            </div>
+            <UnitToggle unit={unit} onChange={setUnit} />
           </header>
 
           <p className="temperature">

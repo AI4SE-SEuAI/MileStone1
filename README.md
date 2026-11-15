@@ -7,7 +7,9 @@ forecast APIs, so no API key or `.env` secret is required.
 ## Base agent and model
 
 - Base agent: OpenCode v1 (the project specification targets v1.18.31)
-- Model: `openrouter/deepseek/deepseek-v4.1-flash-1017`
+- Model: `opencode/deepseek-v4.1-flash-free` (see `model-selection.md`).
+  The OpenRouter key in this environment reports a `$0.00` limit; pass
+  `-m openrouter/deepseek/deepseek-v4.1-flash-1017` after adding budget.
 - Model comparison and rationale: [`model-selection.md`](./model-selection.md)
 
 ## Repository layout
@@ -20,12 +22,23 @@ forecast APIs, so no API key or `.env` secret is required.
 ├── model-selection.md            # 3-model comparison and decision
 ├── .opencode/
 │   ├── package.json              # @opencode-ai/plugin dependency
+│   ├── lib/
+│   │   └── verification.ts       # shared check runners (types/tests/build/free API)
 │   └── tools/
 │       ├── check_build.ts            # runs `npm run build` in target-app
 │       ├── check_types.ts            # runs `npx tsc --noEmit` in target-app
+│       ├── check_tests.ts            # runs `npm test`, returns failing test names
 │       ├── check_free_weather_api.ts # checks free API usage, writes a report
+│       ├── verification_gate.ts      # full pipeline + retry-limit stop criterion
 │       └── temperature_converter.ts  # C/F conversion tool
-├── results/                      # generated check reports
+├── docs/
+│   ├── sandbox.md                # allow / ask / deny sandbox concept
+│   └── m2-demo-prompt.md         # exact headless demo prompt
+├── scripts/
+│   ├── m2-stop-criterion.mjs     # demonstrates retry-limit STOPPED
+│   ├── m2-final-gate.mjs         # runs the gate for the final check
+│   └── ts-resolve-loader.mjs     # Node loader for extensionless TS imports
+├── results/                      # generated check reports and verification logs
 └── target-app/                   # Next.js weather app (the target software)
 ```
 
@@ -75,14 +88,14 @@ Example prompt:
 
 ```text
 Read AGENTS.md and spec.md. Implement the weather app in target-app using the
-free Open-Meteo API (no API key). Run check_types, check_build,
-check_free_weather_api, and npm test, and fix until all are green.
+free Open-Meteo API (no API key). Run verification_gate and fix until it
+returns PASS within the 5-attempt retry budget.
 ```
 
 Headless example:
 
 ```powershell
-opencode run "Read AGENTS.md and spec.md. Implement the spec in target-app, then run the checks until green."
+opencode run "Read AGENTS.md and spec.md. Implement the spec in target-app, then run verification_gate until it passes."
 ```
 
 ## Custom tools
@@ -90,19 +103,68 @@ opencode run "Read AGENTS.md and spec.md. Implement the spec in target-app, then
 | Tool | Purpose |
 | --- | --- |
 | `check_types` | Runs `npx tsc --noEmit` inside `target-app`. |
+| `check_tests` | Runs `npm test` (vitest) and returns pass/fail counts plus failing test names. |
 | `check_build` | Runs `npm run build` inside `target-app`. |
 | `check_free_weather_api` | Verifies Open-Meteo usage, rejects API-key/OpenWeatherMap usage, and writes `results/free-weather-api.json`. |
+| `verification_gate` | Runs types → tests → build → free-API, logs every attempt, and enforces the retry-limit stop criterion. |
 | `temperature_converter` | Converts temperatures between Celsius and Fahrenheit. |
 
 ## Verification loop
 
-The agent repeats this until all checks are green:
+The agent repeats this until the gate passes:
 
-1. Edit code in `target-app/`.
-2. Run `check_types`, `check_build`, `check_free_weather_api`, and `npm test`.
-3. If a check fails, read the structured result/report, fix the cause, and rerun.
+1. Edit code in `target-app/src/`.
+2. Run `verification_gate`. It runs `check_types` → `check_tests` →
+   `check_build` → `check_free_weather_api` in order and stops at the first
+   failure.
+3. If the gate returns `FAIL`, read the structured result,
+   `results/verification-log.jsonl`, and `results/test-report.json`; fix the
+   cause and rerun.
 
-Stop criterion: all three harness checks return `SUCCESS` and `npm test` passes.
+**Stop criterion:** the gate returns `STOPPED` after **5 attempts without a
+PASS**. A `PASS` resets the retry budget. After `STOPPED`, call
+`verification_gate` with `{"reset": true}` to start a new cycle.
+
+Milestone 2 evidence:
+
+- `results/m2-demo.log` — headless `opencode run` transcript for the demo feature
+  (RED → fix → GREEN).
+- `results/m2-demo-verification-log.jsonl` — gate attempts from that demo run.
+- `results/m2-stop-criterion.log` — five failed attempts followed by `STOPPED`.
+- `results/m2-verification-log.jsonl` — full gate log (demo + stop criterion +
+  final PASS).
+- `results/m2-final-gate.log` — final `PASS` result.
+- `results/verification-state.json` — current retry counter.
+- `results/test-report.json` — latest test summary.
+- `docs/m2-demo-prompt.md` — exact prompt used for the demo.
+- `scripts/m2-stop-criterion.mjs`, `scripts/m2-final-gate.mjs` — reproducible
+  gate drivers.
+
+The demo feature added a reusable `UnitToggle` component and applied it to the
+"Cities right now" list, with `formatCityTemperature` covered by unit tests.
+
+Reproduce the stop criterion and the final gate:
+
+```powershell
+node --no-warnings --experimental-strip-types --experimental-loader ./scripts/ts-resolve-loader.mjs scripts/m2-stop-criterion.mjs
+node --no-warnings --experimental-strip-types --experimental-loader ./scripts/ts-resolve-loader.mjs scripts/m2-final-gate.mjs
+```
+
+`m2-stop-criterion.mjs` creates a temporary failing test, runs the gate five
+times, shows the sixth call returning `STOPPED`, deletes the temporary test, and
+resets the budget.
+
+## Sandbox and permissions
+
+The agent runs with a restricted working directory, a file-write allowlist, and
+a command allow/ask/deny list. The full matrix and its limitations are in
+[`docs/sandbox.md`](./docs/sandbox.md).
+
+- **Allowed:** edits in `target-app/src/`, `results/`, `docs/`; the verification
+  commands (`npm test`, `npm run build`, `npx tsc --noEmit`).
+- **Requires confirmation:** edits elsewhere, `npm install`, `git add`/`commit`.
+- **Forbidden:** `.env`/secrets, paths outside the worktree, `git push`,
+  destructive deletes, shell network fetches, `webfetch`/`websearch`.
 
 ## Weather data
 

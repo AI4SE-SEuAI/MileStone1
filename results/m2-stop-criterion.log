@@ -1,0 +1,86 @@
+﻿=== create temporary failing test ===
+target-app\src\services\weather\__stop_criterion_demo.test.ts
+=== reset ===
+{
+  "args": {
+    "reset": true
+  },
+  "status": "RESET",
+  "maxAttempts": 5,
+  "message": "Retry counter reset. New budget: 5 attempts."
+}
+=== failing attempt 1 ===
+{
+  "args": {},
+  "status": "FAIL",
+  "attempt": 1,
+  "maxAttempts": 5,
+  "remainingAttempts": 4,
+  "failedCheck": "tests",
+  "message": "Verification failed at \"tests\". Fix the cause and rerun."
+}
+=== failing attempt 2 ===
+{
+  "args": {},
+  "status": "FAIL",
+  "attempt": 2,
+  "maxAttempts": 5,
+  "remainingAttempts": 3,
+  "failedCheck": "tests",
+  "message": "Verification failed at \"tests\". Fix the cause and rerun."
+}
+=== failing attempt 3 ===
+{
+  "args": {},
+  "status": "FAIL",
+  "attempt": 3,
+  "maxAttempts": 5,
+  "remainingAttempts": 2,
+  "failedCheck": "tests",
+  "message": "Verification failed at \"tests\". Fix the cause and rerun."
+}
+=== failing attempt 4 ===
+{
+  "args": {},
+  "status": "FAIL",
+  "attempt": 4,
+  "maxAttempts": 5,
+  "remainingAttempts": 1,
+  "failedCheck": "tests",
+  "message": "Verification failed at \"tests\". Fix the cause and rerun."
+}
+=== failing attempt 5 ===
+{
+  "args": {},
+  "status": "FAIL",
+  "attempt": 5,
+  "maxAttempts": 5,
+  "remainingAttempts": 0,
+  "failedCheck": "tests",
+  "message": "Verification failed at \"tests\". Fix the cause and rerun."
+}
+=== attempt 6 (must be STOPPED) ===
+{
+  "args": {},
+  "status": "STOPPED",
+  "maxAttempts": 5,
+  "message": "Retry limit reached: 5/5 attempts without a PASS. The gate will not run again until you reset it."
+}
+=== state after STOPPED ===
+{
+  "attempts": 5,
+  "maxAttempts": 5,
+  "startedAt": "2026-11-15T20:42:07.612Z",
+  "lastStatus": "STOPPED",
+  "lastRunAt": "2026-11-15T20:42:21.270Z"
+}
+=== removed temporary failing test ===
+=== reset for final verification ===
+{
+  "args": {
+    "reset": true
+  },
+  "status": "RESET",
+  "maxAttempts": 5,
+  "message": "Retry counter reset. New budget: 5 attempts."
+}

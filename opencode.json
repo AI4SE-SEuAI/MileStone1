@@ -1,11 +1,62 @@
 {
   "$schema": "https://opencode.ai/config.json",
-  "model": "openrouter/deepseek/deepseek-v4.1-flash-1017",
+  "model": "opencode/deepseek-v4.1-flash-free",
   "instructions": ["spec.md"],
   "permission": {
-    "*": "allow",
-    "bash": "allow",
-    "edit": "allow",
-    "read": "allow"
+    "read": {
+      "*": "allow",
+      "**/.env": "deny",
+      "**/.env.*": "deny",
+      "**/secrets/**": "deny"
+    },
+    "edit": {
+      "*": "ask",
+      "target-app/src/**": "allow",
+      "results/**": "allow",
+      "docs/**": "allow",
+      "target-app/.next/**": "deny",
+      "**/node_modules/**": "deny",
+      "**/.env": "deny",
+      "**/.env.*": "deny",
+      "**/secrets/**": "deny"
+    },
+    "bash": {
+      "*": "ask",
+      "npm test*": "allow",
+      "npm run test*": "allow",
+      "npm run build*": "allow",
+      "npm run typecheck*": "allow",
+      "npx tsc*": "allow",
+      "npx vitest*": "allow",
+      "git status*": "allow",
+      "git diff*": "allow",
+      "git log*": "allow",
+      "Get-ChildItem*": "allow",
+      "Get-Content*": "allow",
+      "Get-Location*": "allow",
+      "Test-Path*": "allow",
+      "Select-String*": "allow",
+      "npm install*": "ask",
+      "git add*": "ask",
+      "git commit*": "ask",
+      "rm -rf *": "deny",
+      "rm -r *": "deny",
+      "Remove-Item *": "deny",
+      "git push*": "deny",
+      "git reset --hard*": "deny",
+      "curl *": "deny",
+      "wget *": "deny",
+      "Invoke-WebRequest *": "deny",
+      "format *": "deny"
+    },
+    "external_directory": {
+      "*": "deny"
+    },
+    "webfetch": "deny",
+    "websearch": "deny",
+    "task": "ask",
+    "skill": "allow",
+    "question": "allow",
+    "todowrite": "allow"
   }
 }

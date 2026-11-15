@@ -1,6 +1,5 @@
-import path from "path";
-import { execSync } from "child_process";
 import { tool } from "@opencode-ai/plugin";
+import { runTypeCheck } from "../lib/verification";
 
 export default tool({
   description:
@@ -10,25 +9,12 @@ export default tool({
   args: {},
 
   async execute(_args, context) {
-    const targetDir = path.join(context.worktree, "target-app");
+    const result = runTypeCheck(context.worktree);
 
-    try {
-      execSync("npx tsc --noEmit", {
-        cwd: targetDir,
-        encoding: "utf-8",
-      });
-
-      return JSON.stringify({
-        status: "SUCCESS",
-        message: "No TypeScript type errors found.",
-      });
-    } catch (error) {
-      const err = error as NodeJS.ErrnoException & { stdout?: string | Buffer };
-      return JSON.stringify({
-        status: "FAILED",
-        message: "TypeScript type errors detected.",
-        errorLog: err.stdout ? err.stdout.toString() : err.message,
-      });
-    }
+    return JSON.stringify({
+      status: result.ok ? "SUCCESS" : "FAILED",
+      message: result.message,
+      ...(result.errorLog ? { errorLog: result.errorLog } : {}),
+    });
   },
 });

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import { describeWeatherCode } from "@/services/weather/conditions";
 import {
   convertTemperature,
+  formatCityTemperature,
   formatTemperature,
 } from "@/services/weather/temperature_converter";
 
@@ -31,5 +32,16 @@ describe("temperature_converter", () => {
   it("formats a Celsius reading in the requested unit", () => {
     expect(formatTemperature(13.4, "celsius")).toBe("13.4°C");
     expect(formatTemperature(13.4, "fahrenheit")).toBe("56.1°F");
+  });
+});
+
+describe("formatCityTemperature", () => {
+  it("renders a placeholder for missing readings", () => {
+    expect(formatCityTemperature(null, "celsius")).toBe("—");
+  });
+
+  it("formats a city reading in the requested unit", () => {
+    expect(formatCityTemperature(13.4, "celsius")).toBe("13.4°C");
+    expect(formatCityTemperature(13.4, "fahrenheit")).toBe("56.1°F");
   });
 });
